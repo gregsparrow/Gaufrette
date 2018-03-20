@@ -61,9 +61,11 @@ class Local implements Adapter,
         $path = $this->computePath($key);
         $this->ensureDirectoryExists(\Gaufrette\Util\Path::dirname($key));
 
-        if (!@file_put_contents($path, $content)) {
+        $writedBytes = @file_put_contents($path, $content);
+        if ($writedBytes == FALSE) {
             throw StorageFailure::unexpectedFailure('write', ['key' => $key]);
         }
+        return $writedBytes;
     }
 
     /**
